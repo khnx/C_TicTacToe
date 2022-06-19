@@ -1,0 +1,12 @@
+{
+  "files.associations": {
+    "fps_counter.h": "c",
+    "clean_up.c": "c",
+    "init.h": "c",
+    "program_loop.h": "c",
+    "render_tiles.h": "c",
+    "display_text.h": "c",
+    "sdl.h": "c",
+    "structs.h": "c"
+  }
+}
