@@ -11,6 +11,7 @@
 
 #include "structs.h"
 
-void program_loop(Game_State *game, FPS_Counter *fps, Board *board, Msg *msg);
+void program_loop(Game_State *game, FPS_Counter *fps, Board *board, Msg *msg,
+                  Msg *submsg);
 
 #endif // -- PROGRAM_LOOP_H

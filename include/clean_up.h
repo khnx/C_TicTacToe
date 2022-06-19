@@ -6,6 +6,6 @@
 
 #include "structs.h"
 
-void clean_up(Game_State *game, FPS_Counter *fps);
+void clean_up(Game_State *game, FPS_Counter *fps, Msg *msg, Msg *submsg);
 
 #endif // -- CLEAN_UP_H

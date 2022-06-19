@@ -26,31 +26,69 @@ SDL_bool event_loop(Board *board, Uint16 *won) {
 static Uint16 winner(Uint16 values[3][3]) {
 
   // Rows.
-  if (((values[0][0] == values[0][1]) && (values[0][1] == values[0][2]) &&
-       values[0][0] != 0) ||
-      ((values[1][0] == values[1][1]) && (values[1][1] == values[1][2]) &&
-       values[1][0] != 0) ||
-      ((values[2][0] == values[2][1]) && (values[2][1] == values[2][2]) &&
-       values[2][0] != 0)) {
-    return 1;
+  if ((values[0][0] == values[0][1]) && (values[0][1] == values[0][2]) &&
+      values[0][0] != 0) {
+    if (values[0][0] == 1)
+      goto Player1;
+    else
+      goto Player2;
+  } else if ((values[1][0] == values[1][1]) && (values[1][1] == values[1][2]) &&
+             values[1][0] != 0) {
+    if (values[1][0] == 1)
+      goto Player1;
+    else
+      goto Player2;
+  } else if ((values[2][0] == values[2][1]) && (values[2][1] == values[2][2]) &&
+             values[2][0] != 0) {
+    if (values[2][0] == 1)
+      goto Player1;
+    else
+      goto Player2;
   }
   // Columns.
-  else if (((values[0][0] == values[1][0]) && (values[1][0] == values[2][0]) &&
-            values[0][0] != 0) ||
-           ((values[1][0] == values[1][1]) && (values[1][1] == values[1][2]) &&
-            values[1][0] != 0) ||
-           ((values[2][0] == values[2][1]) && (values[2][1] == values[2][2]) &&
-            values[2][0] != 0)) {
-    return 1;
+  else if ((values[0][0] == values[1][0]) && (values[1][0] == values[2][0]) &&
+           values[0][0] != 0) {
+    if (values[0][0] == 1)
+      goto Player1;
+    else
+      goto Player2;
+  } else if ((values[0][1] == values[1][1]) && (values[1][1] == values[2][1]) &&
+             values[0][1] != 0) {
+    if (values[0][1] == 1)
+      goto Player1;
+    else
+      goto Player2;
+  } else if ((values[0][2] == values[1][2]) && (values[1][2] == values[2][2]) &&
+             values[0][2] != 0) {
+    if (values[0][2] == 1)
+      goto Player1;
+    else
+      goto Player2;
   }
   // Diagonal.
-  else if (((values[0][0] == values[1][1]) && (values[1][1] == values[2][2]) &&
-            values[0][0] != 0) ||
-           ((values[0][2] == values[1][1]) && (values[1][1] == values[2][0]) &&
-            values[0][2] != 0)) {
-    return 1;
+  else if ((values[0][0] == values[1][1]) && (values[1][1] == values[2][2]) &&
+           values[0][0] != 0) {
+    if (values[0][0] == 1)
+      goto Player1;
+    else
+      goto Player2;
+  } else if ((values[0][2] == values[1][1]) && (values[1][1] == values[2][0]) &&
+             values[0][2] != 0) {
+    if (values[0][2] == 1)
+      goto Player1;
+    else
+      goto Player2;
+  }
+  // No match.
+  else {
+    goto NoWin;
   }
 
+Player1:
+  return 1;
+Player2:
+  return 2;
+NoWin:
   return 0;
 }
 
@@ -59,6 +97,7 @@ static void mouse_click(SDL_Event *event, Board *board, Uint16 *won) {
   Sint32 y = event->motion.y;
 
   static Uint16 turn = 0;
+  static Uint16 moves_count = 0;
 
   for (int i = 0; i < 3; i++) {
     for (int j = 0; j < 3; j++) {
@@ -75,7 +114,11 @@ static void mouse_click(SDL_Event *event, Board *board, Uint16 *won) {
           turn = 1;
         }
 
+        moves_count++;
         *won = winner(board->values);
+
+        if (moves_count == 9)
+          *won = 3;
       }
     }
   }

@@ -1,7 +1,9 @@
 #include "../include/clean_up.h"
 
-void clean_up(Game_State *game, FPS_Counter *fps) {
+void clean_up(Game_State *game, FPS_Counter *fps, Msg *msg, Msg *submsg) {
 
+  SDL_DestroyTexture(msg->texture);
+  SDL_DestroyTexture(submsg->texture);
   SDL_DestroyTexture(fps->texture);
 
   TTF_Quit();
