@@ -12,17 +12,28 @@ void init(Game_State *game, FPS_Counter *fps) {
   fps->texture = NULL;
 
   if (SDL_Init(SDL_INIT_VIDEO)) {
-    SDL_Log("Unable to initialize SDL: %s", SDL_GetError());
+    SDL_Log("Unable to Initialize SDL: %s", SDL_GetError());
+    exit(EXIT_FAILURE);
+  }
+
+  if (TTF_Init()) {
+    SDL_Log("Unable to Initialize TTF: %s", SDL_GetError());
     exit(EXIT_FAILURE);
   }
 
   game->win = SDL_CreateWindow("Window Name", SDL_WINDOWPOS_UNDEFINED,
                                SDL_WINDOWPOS_UNDEFINED, WIN_WIDTH_DEFAULT,
                                WIN_HEIGHT_DEFAULT, 0);
-  assert(game->win);
+  if (!game->win) {
+    SDL_Log("Unable to Initialize Window: %s", SDL_GetError());
+    exit(EXIT_FAILURE);
+  }
 
   game->renderer = SDL_CreateRenderer(game->win, -1, renderer_flags);
-  assert(game->renderer);
+  if (!game->renderer) {
+    SDL_Log("Unable to Initialize Renderer: %s", SDL_GetError());
+    exit(EXIT_FAILURE);
+  }
 
   // Limit minimal size of window, so it's visible. Comes after the renderer is
   // created.

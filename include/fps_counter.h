@@ -10,6 +10,6 @@
 
 #include "structs.h"
 
-void fps_counter(SDL_Renderer *renderer, FPS_Counter *fps);
+void fps_counter(SDL_Renderer *renderer, FPS_Counter *fps, TTF_Font *font);
 
 #endif // -- FPS_COUNTER_H

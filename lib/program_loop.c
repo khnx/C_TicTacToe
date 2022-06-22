@@ -1,7 +1,7 @@
 #include "../include/program_loop.h"
 
 static void display_end_message(SDL_Renderer *renderer, Msg *msg, Msg *submsg,
-                                Uint16 won);
+                                Uint16 won, TTF_Font *font1, TTF_Font *font2);
 
 void program_loop(Game_State *game, FPS_Counter *fps, Board *board, Msg *msg,
                   Msg *submsg) {
@@ -10,6 +10,20 @@ void program_loop(Game_State *game, FPS_Counter *fps, Board *board, Msg *msg,
   set_tiles(board);
   // Someone won the game.
   Uint16 won = 0;
+
+  TTF_Font *font_sm = NULL;
+  TTF_Font *font_subtext = NULL;
+  TTF_Font *font_endtext = NULL;
+
+  const char *font_path = "fonts/freesans/FreeSans.ttf";
+
+  font_sm = TTF_OpenFont(font_path, 12);
+  font_subtext = TTF_OpenFont(font_path, 26);
+  font_endtext = TTF_OpenFont(font_path, 44);
+  if (!font_sm || !font_subtext || !font_endtext) {
+    SDL_Log("Font not found: %s\n", SDL_GetError());
+    exit(EXIT_FAILURE);
+  }
 
   while (!game->quit) {
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
@@ -22,31 +36,31 @@ void program_loop(Game_State *game, FPS_Counter *fps, Board *board, Msg *msg,
     // Display the board.
     render_tiles(renderer, board);
     if (won)
-      display_end_message(renderer, msg, submsg, won);
+      display_end_message(renderer, msg, submsg, won, font_endtext,
+                          font_subtext);
 
     // Display fps counter.
-    fps_counter(renderer, fps);
+    fps_counter(renderer, fps, font_sm);
 
     // Display the renderer.
     SDL_RenderPresent(renderer);
+
+    SDL_DestroyTexture(msg->texture);
+    SDL_DestroyTexture(submsg->texture);
+    SDL_DestroyTexture(fps->texture);
 
     Uint64 fps_end = SDL_GetPerformanceCounter();
     fps->value =
         1.0f / ((fps_end - fps_start) / (double)SDL_GetPerformanceFrequency());
   }
+
+  TTF_CloseFont(font_sm);
+  TTF_CloseFont(font_subtext);
+  TTF_CloseFont(font_endtext);
 }
 
 static void display_end_message(SDL_Renderer *renderer, Msg *msg, Msg *submsg,
-                                Uint16 won) {
-  const char *font_path = "fonts/freesans/FreeSans.ttf";
-
-  TTF_Init();
-  TTF_Font *font = TTF_OpenFont(font_path, 44);
-  TTF_Font *font2 = TTF_OpenFont(font_path, 26);
-  if (!font || !font2) {
-    fprintf(stderr, "Error: Font not found.\n");
-    exit(EXIT_FAILURE);
-  }
+                                Uint16 won, TTF_Font *font1, TTF_Font *font2) {
 
   SDL_Rect rect;
   rect.w = msg->rect.w + 120;
@@ -60,7 +74,7 @@ static void display_end_message(SDL_Renderer *renderer, Msg *msg, Msg *submsg,
   Color color = {255, 255, 255, 255};
 
   display_text(renderer, WIN_WIDTH_DEFAULT / 2 - msg->rect.w / 2,
-               WIN_HEIGHT_DEFAULT / 2 - msg->rect.h / 2, msg->text, font,
+               WIN_HEIGHT_DEFAULT / 2 - msg->rect.h / 2, msg->text, font1,
                &msg->texture, &msg->rect, &color);
   SDL_RenderCopy(renderer, msg->texture, NULL, &msg->rect);
 

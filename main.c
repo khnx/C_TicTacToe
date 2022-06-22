@@ -11,7 +11,7 @@ int main(void) {
 
   init(&game, &fps);
   program_loop(&game, &fps, &board, &end_msg, &end_submsg);
-  clean_up(&game, &fps, &end_msg, &end_submsg);
+  clean_up(&game);
 
   return EXIT_SUCCESS;
 }

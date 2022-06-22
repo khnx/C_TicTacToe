@@ -3,6 +3,7 @@
 void display_text(SDL_Renderer *renderer, int x, int y, const char *text,
                   TTF_Font *font, SDL_Texture **texture, SDL_Rect *rect,
                   Color *color) {
+
   int text_width, text_height;
   SDL_Surface *surface;
   SDL_Color text_color = {color->r, color->g, color->b, color->a};

@@ -18,8 +18,8 @@
 #ifndef INIT_H
 #define INIT_H 1
 
+#include "SDL2/SDL_ttf.h"
 #include <SDL2/SDL.h>
-#include <assert.h>
 
 #include "structs.h"
 

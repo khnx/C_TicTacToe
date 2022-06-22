@@ -1,15 +1,6 @@
 #include "../include/fps_counter.h"
 
-void fps_counter(SDL_Renderer *renderer, FPS_Counter *fps) {
-
-  const char *font_path = "fonts/freesans/FreeSans.ttf";
-
-  TTF_Init();
-  TTF_Font *font = TTF_OpenFont(font_path, 12);
-  if (!font) {
-    fprintf(stderr, "Error: Font not found.\n");
-    exit(EXIT_FAILURE);
-  }
+void fps_counter(SDL_Renderer *renderer, FPS_Counter *fps, TTF_Font *font) {
 
   // Display only 1 in 60 fps.
   static int tick_count = 0;
